@@ -35,15 +35,15 @@ type Estado = [String]
 
 -- Ejercicio 1
 variables :: Prop -> [String]
-variables prop = sinRepetidos (go prop)
+variables prop = sinRepetidos (recorre prop)
   where
-    go (Var v) = [v]
-    go (Cons _) = []
-    go (Not a) = go a
-    go (And a b) = go a ++ go b
-    go (Or a b) = go a ++ go b
-    go (Impl a b) = go a ++ go b
-    go (Syss a b) = go a ++ go b
+    recorre (Var v) = [v]
+    recorre (Cons _) = []
+    recorre (Not a) = recorre a
+    recorre (And a b) = recorre a ++ recorre b
+    recorre (Or a b) = recorre a ++ recorre b
+    recorre (Impl a b) = recorre a ++ recorre b
+    recorre (Syss a b) = recorre a ++ recorre b
 
 -- Ejercicio 2
 interpretacion :: Prop -> Estado -> Bool
@@ -79,21 +79,21 @@ contradiccion = undefined
 consecuenciaLogica :: [Prop] -> Prop -> Bool
 consecuenciaLogica = undefined
 
--- Funciones auxiliares 
+-- Funciones auxiliares
 
 -- Conjunto potencia de una lista
 conjPotencia :: [a] -> [[a]]
 conjPotencia [] = [[]]
 conjPotencia (x : xs) = [(x : ys) | ys <- conjPotencia xs] ++ conjPotencia xs
 
--- Elimina repetidos de una lista de Strings 
+-- Elimina repetidos de una lista de Strings
 sinRepetidos :: [String] -> [String]
 sinRepetidos [] = []
 sinRepetidos (x : xs)
   | pertenece x xs = sinRepetidos xs
   | otherwise = x : sinRepetidos xs
 
--- Pertenencia en lista de Strings 
+-- Pertenencia en lista de Strings
 pertenece :: String -> [String] -> Bool
 pertenece _ [] = False
 pertenece v (x : xs) = v == x || pertenece v xs
