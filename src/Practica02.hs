@@ -81,6 +81,10 @@ consecuenciaLogica = undefined
 
 -- Funciones auxiliares
 
+-- Alias en espanol de otherwise
+enOtroCaso :: Bool
+enOtroCaso = True
+
 -- Conjunto potencia de una lista
 conjPotencia :: [a] -> [[a]]
 conjPotencia [] = [[]]
@@ -91,7 +95,7 @@ sinRepetidos :: [String] -> [String]
 sinRepetidos [] = []
 sinRepetidos (x : xs)
   | pertenece x xs = sinRepetidos xs
-  | otherwise = x : sinRepetidos xs
+  | enOtroCaso = x : sinRepetidos xs
 
 -- Pertenencia en lista de Strings
 pertenece :: String -> [String] -> Bool
@@ -108,4 +112,4 @@ filtra :: (a -> Bool) -> [a] -> [a]
 filtra _ [] = []
 filtra f (x : xs)
   | f x = x : filtra f xs
-  | otherwise = filtra f xs
+  | enOtroCaso = filtra f xs
