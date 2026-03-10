@@ -79,7 +79,7 @@ contradiccion = undefined
 consecuenciaLogica :: [Prop] -> Prop -> Bool
 consecuenciaLogica = undefined
 
--- Funciones auxiliares propias (sin librerias externas)
+-- Funciones auxiliares 
 
 -- Conjunto potencia de una lista
 conjPotencia :: [a] -> [[a]]
