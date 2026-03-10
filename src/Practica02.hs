@@ -86,24 +86,24 @@ conjPotencia :: [a] -> [[a]]
 conjPotencia [] = [[]]
 conjPotencia (x : xs) = [(x : ys) | ys <- conjPotencia xs] ++ conjPotencia xs
 
--- Elimina repetidos de una lista de Strings (equiv. a Data.List.nub)
+-- Elimina repetidos de una lista de Strings 
 sinRepetidos :: [String] -> [String]
 sinRepetidos [] = []
 sinRepetidos (x : xs)
   | pertenece x xs = sinRepetidos xs
   | otherwise = x : sinRepetidos xs
 
--- Pertenencia en lista de Strings (equiv. a elem)
+-- Pertenencia en lista de Strings 
 pertenece :: String -> [String] -> Bool
 pertenece _ [] = False
 pertenece v (x : xs) = v == x || pertenece v xs
 
--- Negacion booleana (equiv. a not)
+-- Negacion de un booleano
 negacion :: Bool -> Bool
 negacion True = False
 negacion False = True
 
--- Filtro de lista (equiv. a filter)
+-- Filtro de lista
 filtra :: (a -> Bool) -> [a] -> [a]
 filtra _ [] = []
 filtra f (x : xs)
