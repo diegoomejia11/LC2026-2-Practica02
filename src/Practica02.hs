@@ -1,25 +1,21 @@
 module Practica02 where
 
--- Sintaxis de la logica proposicional
-data Prop
-  = Var String
-  | Cons Bool
-  | Not Prop
-  | And Prop Prop
-  | Or Prop Prop
-  | Impl Prop Prop
-  | Syss Prop Prop
-  deriving (Eq)
+--Sintaxis de la logica proposicional
+data Prop = Var String | Cons Bool | Not Prop
+            | And Prop Prop | Or Prop Prop
+            | Impl Prop Prop | Syss Prop Prop
+            deriving (Eq)
 
-instance Show Prop where
-  show (Cons True) = "⊤"
-  show (Cons False) = "⊥"
-  show (Var v) = v
-  show (Not a) = "¬" ++ show a
-  show (Or a b) = "(" ++ show a ++ " ∨ " ++ show b ++ ")"
-  show (And a b) = "(" ++ show a ++ " ∧ " ++ show b ++ ")"
-  show (Impl a b) = "(" ++ show a ++ " → " ++ show b ++ ")"
-  show (Syss a b) = "(" ++ show a ++ " ↔ " ++ show b ++ ")"
+instance Show Prop where 
+                    show (Cons True) = "⊤"
+                    show (Cons False) = "⊥"
+                    show (Var p) = p
+                    show (Not p) = "¬" ++ show p
+                    show (Or p q) = "(" ++ show p ++ " ∨ " ++ show q ++ ")"
+                    show (And p q) = "(" ++ show p ++ " ∧ " ++ show q ++ ")"
+                    show (Impl p q) = "(" ++ show p ++ " → " ++ show q ++ ")"
+                    show (Syss p q) = "(" ++ show p ++ " ↔ " ++ show q ++ ")"
+
 
 p, q, r, s, t, u :: Prop
 p = Var "p"
@@ -31,9 +27,9 @@ u = Var "u"
 
 type Estado = [String]
 
--- EJERCICIOS
+--EJERCICIOS
 
--- Ejercicio 1
+--Ejercicio 1
 variables :: Prop -> [String]
 variables prop = sinRepetidos (recorre prop)
   where
@@ -45,7 +41,7 @@ variables prop = sinRepetidos (recorre prop)
     recorre (Impl a b) = recorre a ++ recorre b
     recorre (Syss a b) = recorre a ++ recorre b
 
--- Ejercicio 2
+--Ejercicio 2
 interpretacion :: Prop -> Estado -> Bool
 interpretacion (Var v) estado = pertenece v estado
 interpretacion (Cons b) _ = b
@@ -55,34 +51,35 @@ interpretacion (Or a b) estado = interpretacion a estado || interpretacion b est
 interpretacion (Impl a b) estado = negacion (interpretacion a estado) || interpretacion b estado
 interpretacion (Syss a b) estado = interpretacion a estado == interpretacion b estado
 
--- Ejercicio 3
+--Ejercicio 3
 estadosPosibles :: Prop -> [Estado]
 estadosPosibles prop = conjPotencia (variables prop)
 
--- Ejercicio 4
+--Ejercicio 4
 modelos :: Prop -> [Estado]
 modelos p = [ i| i <- estadosPosibles p, interpretacion p i ] 
 
--- Ejercicio 5
+--Ejercicio 5
 sonEquivalentes :: Prop -> Prop -> Bool
 sonEquivalentes f g = 
     yeso [interpretacion f e == interpretacion g e | e <- estados]
     where 
     estados = conjPotencia(sinRepetidos(variables g ++ variables f))
 
--- Ejercicio 6
+--Ejercicio 6 
 tautologia :: Prop -> Bool
-tautologia = undefined
+tautologia p = length (modelos p) == length (estadosPosibles p)
 
--- Ejercicio 7
+--Ejercicio 7
 contradiccion :: Prop -> Bool
-contradiccion = undefined
+contradiccion p = modelos p == []
 
--- Ejercicio 8
+--Ejercicio 8
 consecuenciaLogica :: [Prop] -> Prop -> Bool
-consecuenciaLogica = undefined
+consecuenciaLogica ps q = tautologia (Impl (conjuncion ps) q)
 
--- Funciones auxiliares
+
+--Funcion auxiliar
 
 -- Conjunto potencia de una lista
 conjPotencia :: [a] -> [[a]]
@@ -113,5 +110,12 @@ filtra f (x : xs)
   | f x = x : filtra f xs
   | otherwise = filtra f xs
 
+-- Conjunción de una lista
+conjuncion :: [Prop] -> Prop
+conjuncion [] = Cons True
+conjuncion [p] = p
+conjuncion (p:ps) = And p (conjuncion ps)  
+
+-- Verifica que se cumpla una prop para todo elemento
 yeso [] = True
 yeso (x:xs) = x && and xs
