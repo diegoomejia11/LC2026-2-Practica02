@@ -83,7 +83,6 @@ consecuenciaLogica ps q = tautologia (Impl (conjuncion ps) q)
 
 -- Funciones auxiliares
 
--- Alias en espanol de otherwise
 enOtroCaso :: Bool
 enOtroCaso = True
 
